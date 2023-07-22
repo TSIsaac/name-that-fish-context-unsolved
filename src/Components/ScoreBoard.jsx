@@ -1,23 +1,24 @@
 import "./styles/score-board.css";
 import React from "react";
+import { useGameContext } from "../GameContext";
 //  Where the score is presented
-const incorrectCount = 0;
-const correctCount = 0;
-const answersLeft = ["trout", "salmon", "shark", "tuna"];
+
 
 // ! do not add props to scoreboard
 export const ScoreBoard = () => {
+  const { state } = useGameContext();
+
   return (
     <div id="score-board">
-      <div>Incorrect 🔻: {incorrectCount}</div>
+      <div>Incorrect 🔻: {state.incorrectCount}</div>
       <div id="choices-left">
-        {answersLeft.map((answer) => (
+        {state.answersLeft.map((answer) => (
           <div key={answer} className="choice">
             {answer}
           </div>
         ))}
       </div>
-      <div>Correct ✅: {correctCount}</div>
+      <div>Correct ✅: {state.correctCount}</div>
     </div>
   );
 };
