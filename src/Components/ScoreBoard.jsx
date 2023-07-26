@@ -6,19 +6,19 @@ import { useGameContext } from "../GameContext";
 
 // ! do not add props to scoreboard
 export const ScoreBoard = () => {
-  const { state } = useGameContext();
+  const { correctCount, incorrectCount, answersLeft } = useGameContext();
 
   return (
     <div id="score-board">
-      <div>Incorrect 🔻: {state.incorrectCount}</div>
+      <div>Incorrect 🔻: {incorrectCount}</div>
       <div id="choices-left">
-        {state.answersLeft.map((answer) => (
+        {answersLeft.map((answer) => (
           <div key={answer} className="choice">
             {answer}
           </div>
         ))}
       </div>
-      <div>Correct ✅: {state.correctCount}</div>
+      <div>Correct ✅: {correctCount}</div>
     </div>
   );
 };

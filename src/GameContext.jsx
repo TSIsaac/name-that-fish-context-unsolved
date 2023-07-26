@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState} from "react";
 import PropTypes from "prop-types";
 import { Images } from "./assets/images";
 
@@ -24,54 +24,34 @@ const initialFishes = [
 const GameContext = createContext();
 
 export const GameProvider = ({ children }) => {
-  const [state, setState] = useState({
-    currentFishIndex: 0,
-    correctCount: 0,
-    incorrectCount: 0,
-    answersLeft: initialFishes.map((fish) => fish.name),
-    isGameOver: false,
-  });
+  const [correctCount, setCorrectCount] = useState(0);
+  const [incorrectCount, setIncorrectCount] = useState(0);
+  const [answersLeft, setAnswersLeft] = useState(initialFishes.map((fish) => fish.name));
 
-    useEffect(() => {
-    if (state.correctCount + state.incorrectCount === initialFishes.length) {
-      setState((prevState) => ({ ...prevState, isGameOver: true }));
-    }
-  }, [state.correctCount, state.incorrectCount]);
 
-  const nextFishToName = initialFishes[state.currentFishIndex];
+  const totalCount = correctCount + incorrectCount;
+  const isGameOver = totalCount === initialFishes.length;
+  const nextFishToName = initialFishes[totalCount];
+
 
   const handleFormSubmit = (userGuess) => {
-    const currentFish = initialFishes[state.currentFishIndex];
-
-    if (userGuess.toLowerCase() === currentFish.name) {
-      setState((prevState) => ({
-        ...prevState,
-        correctCount: prevState.correctCount + 1,
-        answersLeft: prevState.answersLeft.filter((answer) => answer !== userGuess),
-      }));
+    if (userGuess.toLowerCase() === nextFishToName.name) {
+      setCorrectCount(correctCount + 1)
+      setAnswersLeft((prevAnswers) => prevAnswers.filter((answer) => answer !== nextFishToName.name));
     } else {
-      setState((prevState) => ({
-        ...prevState,
-        incorrectCount: prevState.incorrectCount + 1,
-        answersLeft: prevState.answersLeft.filter((answer) => answer !== currentFish.name),
-      }));
+      setIncorrectCount(incorrectCount + 1)
+      setAnswersLeft((prevAnswers) => prevAnswers.filter((answer) => answer !== nextFishToName.name));
     }
-
-    if (state.currentFishIndex === initialFishes.length - 1) {
-      setState((prevState) => ({
-        ...prevState,
-        isGameOver: true,
-      }));
-    } else {
-      setState((prevState) => ({
-        ...prevState,
-        currentFishIndex: prevState.currentFishIndex + 1,
-      }));
-    }
-
   };
 
-  const contextValue = { state, nextFishToName, handleFormSubmit };
+  const contextValue = { 
+    isGameOver,
+    answersLeft, 
+    correctCount, 
+    incorrectCount, 
+    totalCount, 
+    nextFishToName, 
+    handleFormSubmit };
 
   return <GameContext.Provider value={contextValue}>{children}</GameContext.Provider>;
 };

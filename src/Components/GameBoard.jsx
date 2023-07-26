@@ -6,8 +6,8 @@ import { useGameContext } from "../GameContext";
 
 // ! Do not add props to gameboard
 export const GameBoard = () => {
-   
-  const { state, nextFishToName, handleFormSubmit } = useGameContext();
+
+  const { nextFishToName, handleFormSubmit } = useGameContext();
   const [userGuess, setUserGuess] = useState("");
 
   const handleSubmit = (event) => {
@@ -16,9 +16,6 @@ export const GameBoard = () => {
     setUserGuess("");
   };
 
-  if (state.isGameOver) {
-    return null; // Render nothing when the game is over
-  }
 
   return (
     <div id="game-board">
