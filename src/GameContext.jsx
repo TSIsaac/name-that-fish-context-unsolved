@@ -21,27 +21,32 @@ const initialFishes = [
   },
 ];
 
+
 const GameContext = createContext();
 
 export const GameProvider = ({ children }) => {
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
-  const [answersLeft, setAnswersLeft] = useState(initialFishes.map((fish) => fish.name));
+  
 
 
   const totalCount = correctCount + incorrectCount;
   const isGameOver = totalCount === initialFishes.length;
   const nextFishToName = initialFishes[totalCount];
+  const currentIndex = totalCount;
 
+  const answersLeft = initialFishes.slice(currentIndex).map((fish) => fish.name);
 
   const handleFormSubmit = (userGuess) => {
     if (userGuess.toLowerCase() === nextFishToName.name) {
       setCorrectCount(correctCount + 1)
-      setAnswersLeft((prevAnswers) => prevAnswers.filter((answer) => answer !== nextFishToName.name));
+      
     } else {
       setIncorrectCount(incorrectCount + 1)
-      setAnswersLeft((prevAnswers) => prevAnswers.filter((answer) => answer !== nextFishToName.name));
+      
     }
+
+
   };
 
   const contextValue = { 
